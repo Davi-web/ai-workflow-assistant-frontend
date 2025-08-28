@@ -12,6 +12,7 @@ import {
 import { IFilterOptions } from "@/types/IFilterOptions"
 import { ISortOption } from "@/types/ISortOptions"
 import { IPullRequest } from "@/types"
+import { LucideInfo } from "lucide-react"
 
 interface DashboardHeaderProps {
   searchQuery: string
@@ -39,6 +40,8 @@ export default function DashboardHeader({
 ).sort();
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-white shadow-sm rounded-xl">
+      {/* Name */ }
+      <h1 className="text-2xl font-bold">Pull Request Dashboard</h1>
       {/* Search */}
       <Input
         type="text"
@@ -127,6 +130,9 @@ export default function DashboardHeader({
         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
       >Refresh PRs
       </button>
+      {/** Info button */}
+      <LucideInfo className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={() => alert("This dashboard allows you to search, filter, and sort pull requests. Use the controls to customize your view.")} />
+
     </div>
   )
 }
