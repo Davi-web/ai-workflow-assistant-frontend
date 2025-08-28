@@ -12,7 +12,9 @@ import {
 import { IFilterOptions } from "@/types/IFilterOptions"
 import { ISortOption } from "@/types/ISortOptions"
 import { IPullRequest } from "@/types"
-import { LucideInfo } from "lucide-react"
+import { LucideGithub, LucideInfo, LucideRefreshCcw } from "lucide-react"
+import { useInfoModal } from "@/stores/useInfoModal"
+import { useRepositoryModal } from "@/stores/useRepositoryModal"
 
 interface DashboardHeaderProps {
   searchQuery: string
@@ -35,6 +37,8 @@ export default function DashboardHeader({
   refetch,
   pullRequests
 }: DashboardHeaderProps) {
+  const { openInfo } = useInfoModal()
+  const { openRepository } = useRepositoryModal()
   const repoOptions = Array.from(
   new Set(pullRequests.map(pr => pr.repo)) // just repo name, not owner
 ).sort();
@@ -125,13 +129,14 @@ export default function DashboardHeader({
           <SelectItem value="asc">Oldest</SelectItem>
         </SelectContent>
       </Select>
-      <button
+      <LucideRefreshCcw
         onClick={refetch}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
-      >Refresh PRs
-      </button>
+        className="cursor-pointer text-gray-500 hover:text-gray-700"
+        size={20}
+        />
       {/** Info button */}
-      <LucideInfo className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={() => alert("This dashboard allows you to search, filter, and sort pull requests. Use the controls to customize your view.")} />
+      <LucideInfo className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={openInfo} />
+      <LucideGithub className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={openRepository}/>
 
     </div>
   )
