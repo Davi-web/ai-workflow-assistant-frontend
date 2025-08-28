@@ -1,38 +1,38 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import DashboardHeader from "@/components/DashboardHeader";
 import Dashboard from "@/components/Dashboard";
-import { IFilterOptions, ISortOption, IPullRequest } from "@/types";
-import { useState, useMemo } from "react";
 import { fetchPRs } from "@/lib/fetchPRs";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { InfoModal } from "@/components/InfoModal";
+import { RepositoryModal } from "@/components/RepositoryModal";
 
-export default function Page() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<IFilterOptions>({
-    status: "",
-    author: "",
-    repo: "",
-    label: "",
-  });
-  const [sortOption, setSortOption] = useState<ISortOption>({
-    field: "created_at",
-    direction: "desc",
-  });
+const queryClient = new QueryClient();
 
+const DashboardContent = () => {
   const { data: pullRequests = [], refetch, isFetching } = useQuery({
     queryKey: ["prs"],
     queryFn: fetchPRs,
     staleTime: 1000 * 60, // 1 minute
   });
-  console.log("Fetched PRs:", pullRequests);
 
   return (
-    <div>
-
-
-      <Dashboard pullRequests={pullRequests} refetch={refetch} isFetching={isFetching} />
-    </div>
+    <>
+      <Dashboard
+        pullRequests={pullRequests}
+        refetch={refetch}
+        isFetching={isFetching}
+      />
+      <InfoModal />
+      <RepositoryModal />
+    </>
   );
 }
 
+export default function Page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <DashboardContent />
+    </QueryClientProvider>
+  );
+}
