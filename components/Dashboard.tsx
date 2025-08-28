@@ -50,11 +50,20 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
         pr.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         pr.repo.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesLabel = !filters.label || filters.label.toLowerCase() === "all"
-        ? true
-        : pr.labels.includes(filters.label);
+    const matchesLabel = !filters.label || filters.label.toLowerCase() === ""
+      ? true
+      : pr.labels.includes(filters.label);
 
-      return matchesSearch && matchesLabel;
+    const matchesRepo = !filters.repo || filters.repo.toLowerCase() === ""
+      ? true
+      : pr.repo.toLowerCase().includes(filters.repo.toLowerCase());
+
+    const matchesAuthor = !filters.author || filters.author.toLowerCase() === ""
+        ? true
+        : pr.author.toLowerCase().includes(filters.author.toLowerCase());
+    
+
+      return matchesSearch && matchesLabel && matchesRepo && matchesAuthor;
     });
 
     return filtered.sort((a, b) => {
@@ -63,7 +72,7 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
       return sortOption.direction === "asc" ? aTime - bTime : bTime - aTime;
     });
   }, [pullRequests, searchQuery, filters, sortOption]);
-
+  console.log(filters)
 
   return (
     <div className="min-h-screen bg-dashboard-bg">
@@ -77,6 +86,7 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
           setSortOption((prev) => ({ ...prev, ...partial }))
         }
         refetch={refetch}
+        pullRequests={pullRequests}
       />
       {isFetching ? (
         <div className="flex justify-center items-center mt-10">
@@ -91,6 +101,7 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
  <Table className="mt-6">
         <TableHeader>
           <TableRow>
+            <TableHead>Author</TableHead>
             <TableHead>Repo</TableHead>
             <TableHead>PR #</TableHead>
             <TableHead>Title</TableHead>
@@ -100,7 +111,8 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
         <TableBody>
           {filteredAndSortedPRs.map(pr => (
             <TableRow key={pr.pr_id}>
-              <TableCell>{pr.repo}</TableCell>
+                <TableCell>{pr.author}</TableCell>
+              <TableCell>{pr.repo.split("/")[1]}</TableCell>
               <TableCell>{pr.pr_number}</TableCell>
               <TableCell>
                 <Link target="_blank" href={`https://github.com/${pr.repo}/pull/${pr.pr_number}`} className="text-blue-600 hover:underline">
@@ -125,7 +137,7 @@ const Dashboard: FC<DashboardProps> = ({ pullRequests, refetch, isFetching }) =>
       </Table>
       )}
        {filteredAndSortedPRs.length === 0 && (
-          <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
+          <motion.div  className="text-center py-12">
             <div className="bg-dashboard-card rounded-lg border p-8 max-w-md mx-auto shadow-[var(--shadow-card)]">
               <h3 className="text-lg font-semibold mb-2">No pull requests found</h3>
               <p className="text-muted-foreground mb-4">

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select"
 import { IFilterOptions } from "@/types/IFilterOptions"
 import { ISortOption } from "@/types/ISortOptions"
+import { IPullRequest } from "@/types"
 
 interface DashboardHeaderProps {
   searchQuery: string
@@ -20,6 +21,7 @@ interface DashboardHeaderProps {
   sortOption: ISortOption
   onSortChange: (value: Partial<ISortOption>) => void
   refetch: () => void
+  pullRequests: IPullRequest[]
 }
 
 export default function DashboardHeader({
@@ -30,7 +32,11 @@ export default function DashboardHeader({
   sortOption,
   onSortChange,
   refetch,
+  pullRequests
 }: DashboardHeaderProps) {
+  const repoOptions = Array.from(
+  new Set(pullRequests.map(pr => pr.repo)) // just repo name, not owner
+).sort();
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-white shadow-sm rounded-xl">
       {/* Search */}
@@ -43,8 +49,49 @@ export default function DashboardHeader({
       />
 
       {/* Filters */}
+      {/* Author filter */ }
       <Select
-        value={filters.label || "all"} // fallback to "all"
+        value={filters.author || ""}
+        onValueChange={(value) => 
+          onFilterChange({ author: value === "all" ? "" : value })
+        }
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Filter by author" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All</SelectItem>
+          {Array.from(new Set(pullRequests.map(pr => pr.author))).sort().map(author => (
+            <SelectItem key={author} value={author}>
+              {author}
+            </SelectItem>
+          ))}
+
+        </SelectContent>
+      </Select>
+
+      {/* Repo filter */}
+<Select
+  value={filters.repo || ""}
+  onValueChange={(value) =>
+    onFilterChange({ repo: value === "all" ? "" : value })
+  }
+>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Filter by repo" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="all">All</SelectItem>
+    {repoOptions.map(repo => (
+      <SelectItem key={repo} value={repo}>
+        {repo}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+
+      <Select
+        value={filters.label || ""} 
         onValueChange={(value) =>
           onFilterChange({ label: value === "all" ? "" : value })
         }
