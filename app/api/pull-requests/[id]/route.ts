@@ -1,9 +1,13 @@
-import { NextResponse } from "next/server"
+import { NextResponse, NextRequest } from "next/server"
 import { getPullRequestById } from "@/lib/dynamodb"
+import { IPullRequest } from "@/types"
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  context: { params: { id: string } }
+): Promise<NextResponse<{ error: string }> | NextResponse<IPullRequest>> {
   try {
-    const pullRequest = await getPullRequestById(params.id)
+    const pullRequest = await getPullRequestById(context.params.id)
     console.log("Fetched pull request:", pullRequest)
 
     if (!pullRequest) {
