@@ -4,10 +4,11 @@ import { IPullRequest } from "@/types"
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  {params}: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<{ error: string }> | NextResponse<IPullRequest>> {
+    const id = (await params).id;
   try {
-    const pullRequest = await getPullRequestById(context.params.id)
+    const pullRequest = await getPullRequestById(id)
     console.log("Fetched pull request:", pullRequest)
 
     if (!pullRequest) {
