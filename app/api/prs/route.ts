@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const res = await docClient.send(
-      new ScanCommand({ TableName: process.env.DYNAMODB_TABLE_NAME })
+      new ScanCommand({ TableName: process.env.DYNAMODB_TABLE_NAME }),
     );
 
     const pullRequests: IPullRequest[] = (res.Items || []).map((item) => ({

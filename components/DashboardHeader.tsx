@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Input } from "@/components/ui/input"
+import * as React from "react";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { IFilterOptions } from "@/types/IFilterOptions"
-import { ISortOption } from "@/types/ISortOptions"
-import { IPullRequest } from "@/types"
-import { LucideGithub, LucideInfo, LucideRefreshCcw } from "lucide-react"
-import { useInfoModal } from "@/stores/useInfoModal"
-import { useRepositoryModal } from "@/stores/useRepositoryModal"
+} from "@/components/ui/select";
+import { IFilterOptions } from "@/types/IFilterOptions";
+import { ISortOption } from "@/types/ISortOptions";
+import { IPullRequest } from "@/types";
+import { LucideGithub, LucideInfo, LucideRefreshCcw } from "lucide-react";
+import { useInfoModal } from "@/stores/useInfoModal";
+import { useRepositoryModal } from "@/stores/useRepositoryModal";
 
 interface DashboardHeaderProps {
-  searchQuery: string
-  onSearchChange: (value: string) => void
-  filters: IFilterOptions
-  onFilterChange: (value: Partial<IFilterOptions>) => void
-  sortOption: ISortOption
-  onSortChange: (value: Partial<ISortOption>) => void
-  refetch: () => void
-  pullRequests: IPullRequest[]
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  filters: IFilterOptions;
+  onFilterChange: (value: Partial<IFilterOptions>) => void;
+  sortOption: ISortOption;
+  onSortChange: (value: Partial<ISortOption>) => void;
+  refetch: () => void;
+  pullRequests: IPullRequest[];
 }
 
 export default function DashboardHeader({
@@ -35,16 +35,16 @@ export default function DashboardHeader({
   sortOption,
   onSortChange,
   refetch,
-  pullRequests
+  pullRequests,
 }: DashboardHeaderProps) {
-  const { openInfo } = useInfoModal()
-  const { openRepository } = useRepositoryModal()
+  const { openInfo } = useInfoModal();
+  const { openRepository } = useRepositoryModal();
   const repoOptions = Array.from(
-  new Set(pullRequests.map(pr => pr.repo)) // just repo name, not owner
-).sort();
+    new Set(pullRequests.map((pr) => pr.repo)), // just repo name, not owner
+  ).sort();
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-white shadow-sm rounded-xl">
-      {/* Name */ }
+      {/* Name */}
       <h1 className="text-2xl font-bold">Pull Request Dashboard</h1>
       {/* Search */}
       <Input
@@ -56,10 +56,10 @@ export default function DashboardHeader({
       />
 
       {/* Filters */}
-      {/* Author filter */ }
+      {/* Author filter */}
       <Select
         value={filters.author || ""}
-        onValueChange={(value) => 
+        onValueChange={(value) =>
           onFilterChange({ author: value === "all" ? "" : value })
         }
       >
@@ -68,37 +68,38 @@ export default function DashboardHeader({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
-          {Array.from(new Set(pullRequests.map(pr => pr.author))).sort().map(author => (
-            <SelectItem key={author} value={author}>
-              {author}
-            </SelectItem>
-          ))}
-
+          {Array.from(new Set(pullRequests.map((pr) => pr.author)))
+            .sort()
+            .map((author) => (
+              <SelectItem key={author} value={author}>
+                {author}
+              </SelectItem>
+            ))}
         </SelectContent>
       </Select>
 
       {/* Repo filter */}
-<Select
-  value={filters.repo || ""}
-  onValueChange={(value) =>
-    onFilterChange({ repo: value === "all" ? "" : value })
-  }
->
-  <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="Filter by repo" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="all">All</SelectItem>
-    {repoOptions.map(repo => (
-      <SelectItem key={repo} value={repo}>
-        {repo}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
+      <Select
+        value={filters.repo || ""}
+        onValueChange={(value) =>
+          onFilterChange({ repo: value === "all" ? "" : value })
+        }
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Filter by repo" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All</SelectItem>
+          {repoOptions.map((repo) => (
+            <SelectItem key={repo} value={repo}>
+              {repo}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
       <Select
-        value={filters.label || ""} 
+        value={filters.label || ""}
         onValueChange={(value) =>
           onFilterChange({ label: value === "all" ? "" : value })
         }
@@ -118,7 +119,10 @@ export default function DashboardHeader({
       <Select
         value={sortOption.direction} // now only direction matters
         onValueChange={(direction) =>
-          onSortChange({ field: "created_at", direction: direction as "asc" | "desc" })
+          onSortChange({
+            field: "created_at",
+            direction: direction as "asc" | "desc",
+          })
         }
       >
         <SelectTrigger className="w-[180px]">
@@ -133,11 +137,18 @@ export default function DashboardHeader({
         onClick={refetch}
         className="cursor-pointer text-gray-500 hover:text-gray-700"
         size={20}
-        />
+      />
       {/** Info button */}
-      <LucideInfo className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={openInfo} />
-      <LucideGithub className="cursor-pointer text-gray-500 hover:text-gray-700" size={20} onClick={openRepository}/>
-
+      <LucideInfo
+        className="cursor-pointer text-gray-500 hover:text-gray-700"
+        size={20}
+        onClick={openInfo}
+      />
+      <LucideGithub
+        className="cursor-pointer text-gray-500 hover:text-gray-700"
+        size={20}
+        onClick={openRepository}
+      />
     </div>
-  )
+  );
 }
