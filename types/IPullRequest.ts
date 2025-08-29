@@ -11,7 +11,7 @@ export interface IPullRequest {
   commit_messages: string[];
   created_at: string;
   updated_at: string;
-  status: 'open' | 'closed' | 'merged' | 'draft';
+  status: "open" | "closed" | "merged" | "draft";
   author: string;
   reviewers: string[];
 }

@@ -18,7 +18,12 @@ const labelColors: Record<string, string> = {
   Docs: "bg-blue-500 text-white",
 };
 
-export default function PRCard({ title, summary, changes, labels }: PRCardProps) {
+export default function PRCard({
+  title,
+  summary,
+  changes,
+  labels,
+}: PRCardProps) {
   return (
     <Card className="rounded-2xl shadow-md hover:shadow-xl transition-all">
       <CardContent className="p-4 space-y-3">

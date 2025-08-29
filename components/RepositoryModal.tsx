@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -7,13 +7,13 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { useRepositoryModal } from "@/stores/useRepositoryModal"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useRepositoryModal } from "@/stores/useRepositoryModal";
 
 export function RepositoryModal() {
-  const { isRepositoryOpen, closeRepository } = useRepositoryModal()
+  const { isRepositoryOpen, closeRepository } = useRepositoryModal();
 
   return (
     <Dialog open={isRepositoryOpen} onOpenChange={closeRepository}>
@@ -48,5 +48,5 @@ export function RepositoryModal() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
