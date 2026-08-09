@@ -46,10 +46,11 @@ const Dashboard: FC<DashboardProps> = ({
   const router = useRouter();
   const filteredPRs = useMemo(() => {
     const filtered = pullRequests.filter((pr) => {
+      
       const matchesSearch =
-        pr.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pr.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pr.repo.toLowerCase().includes(searchQuery.toLowerCase())
+        (pr.title ?? "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (pr.author ?? "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (pr.repo ?? "").toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesStatus = filters === "all" || pr.status === filters
 
