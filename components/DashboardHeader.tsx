@@ -65,7 +65,7 @@ export default function DashboardHeader({
 
         <div className="flex gap-2">
           <Select value={filters} onValueChange={onFilterChange}>
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-40">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>
